@@ -1,0 +1,53 @@
+﻿<!DOCTYPE html>
+<html ng-app="myLocationsApp">
+<head>
+    <title></title>
+    <meta charset=”utf-8”>
+    <link href="css/bootstrap.css" rel="stylesheet" />
+    <link href="css/flaticon.css" rel="stylesheet" />
+    <link href="css/site.css" rel="stylesheet" />
+    <script src="js/jquery-2.1.3.min.js"></script>
+    <script src="js/bootstrap.min.js"></script>
+
+    <script src="js/angular.js"></script>
+
+    <script src="http://maps.googleapis.com/maps/api/js"></script>
+    <script src="js/ng-map.min.js"></script>
+
+    <script src="js/angular-touch.min.js"></script>
+    <script src="js/angular-ui-router.min.js"></script>
+    <script src="js/angular-local-storage.min.js"></script>
+    <script src="js/angular-filter.min.js"></script>
+    <script src="js/vibrate.js"></script>
+
+    <script src="js/app.js"></script>
+</head>
+<body>
+    <!-- MAIN CONTENT -->
+    <div class="container">
+
+        <div ui-view></div><!-- Main injection place -->
+
+    </div>
+    <!-- BOTTOM NAVIGATION -->
+    <div class="footer">
+        <div class="navbar  navbar-fixed-bottom navbar-inverse" role="navigation">
+            <div class="navbar-inner">
+                    <ul class="nav navbar-nav nav-justified">
+                        <li>
+                            <a ui-sref=".categories" title="Categories" ><i class="glyphicon glyphicon-folder-open" style="font-size:1.5em"></i></a>
+                        </li>
+                        <li>
+                            <a ui-sref=".locations" title="Locations" ><i class="glyphicon glyphicon-map-marker" style="font-size:1.5em"></i></a>
+                        </li>
+                    </ul>
+
+                </div>
+           
+        </div>
+
+    </div>
+
+    <div style="display:none">Icons made by <a href="http://www.flaticon.com/authors/freepik" title="Freepik">Freepik</a>, <a href="http://www.flaticon.com/authors/picol" title="Picol">Picol</a> from <a href="http://www.flaticon.com" title="Flaticon">www.flaticon.com</a>             is licensed by <a href="http://creativecommons.org/licenses/by/3.0/" title="Creative Commons BY 3.0">CC BY 3.0</a></div>
+</body>
+</html>

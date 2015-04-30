@@ -1,0 +1,8 @@
+<!-- map.html -->
+
+<p>sdfsdfd</p>
+<div ng-controller="LocationsCtrl" id="map_canvas" >
+    <map center="{{selectedLocation.Coordinates}}" zoom="16">
+        <marker position="{{selectedLocation.Coordinates}}" title="{{selectedLocation.Name}}"></marker>
+    </map>
+</div>

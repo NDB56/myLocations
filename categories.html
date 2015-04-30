@@ -1,0 +1,51 @@
+﻿<!-- categories.html -->
+
+<div ng-controller="CategoriesCtrl">
+    <div>
+        
+        <div class="btn-group">
+            <button class="btn btn-default" ng-click="editCategory()">Edit</button>
+            <button class="btn btn-default" ng-click="addCategory()">Add</button>
+            <button class="btn btn-default" ng-click="deleteCategory()" aria-hidden="true">Remove</button>
+            <button class="btn btn-default" ng-click="shareCategories()" title="Share"><i class="glyphicon glyphicon-share"></i></button>
+        </div>
+        <span class="lead">Categories</span>
+    </div>
+    <form name="categoriesForm" novalidate>
+        <div ng-show="isInAddCategoryMode">
+            <div ng-class="{'form-group': true,'has-error' : categoriesForm.newCategory.$invalid}">
+                <div class="input-group">
+                    <input type="text" class="form-control" name="newCategory" ng-model="newCategoryName" required show-focus="isInAddCategoryMode">
+                    <span class="input-group-btn">
+                        <button class="btn btn-primary" type="button" ng-click="insertCategory()" ng-disabled="categoriesForm.newCategory.$invalid">Insert</button>
+                    </span>
+                    <span class="input-group-btn">
+                        <button class="btn btn-default" ng-click="isInAddCategoryMode=false">X</button>
+                    </span>
+                </div>
+            </div>
+
+
+        </div>
+        <div ng-show="isInEditCategoryMode">
+            <div ng-class="{'form-group': true,'has-error' : categoriesForm.category.$invalid}">
+                <div class="input-group">
+                    <input type="text" class="form-control" name="category" ng-model="selectedCategoryName" required>
+                    <span class="input-group-btn">
+                        <button class="btn btn-primary" type="button" ng-click="updateCategory()" ng-disabled="categoriesForm.category.$invalid">Update</button>
+                    </span>
+                    <span class="input-group-btn">
+                        <button class="btn btn-default" ng-click="isInEditCategoryMode=false">X</button>
+                    </span>
+                </div>
+            </div>
+        </div>
+    </form>
+    <div class="bs-component" ng-model="categories">
+        <div class="list-group">
+            <a href="#" ng-repeat="category in categories | orderBy:'name'" ng-class="{active : isCategorySelected(category),'list-group-item': true}" ng-click="selectCategory(category)">
+                {{category.name}}
+            </a>
+        </div>
+    </div>
+</div>

@@ -1,0 +1,24 @@
+﻿list-item > p {
+    cursor: default;
+}
+
+.bottom-buffer {
+    margin-bottom: 5px;
+}
+
+select.small-select {
+    height: 24px;
+    padding: 2px 10px;
+}
+
+#map_canvas {
+    position: relative;
+}
+
+.button-categories{
+    background:url(img/category.png) no-repeat center;
+}
+.button-location{
+    background:url(img/location54.png) no-repeat center;
+}
+

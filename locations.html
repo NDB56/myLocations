@@ -1,0 +1,137 @@
+﻿<!-- locations.html -->
+
+<div ng-controller="LocationsCtrl">
+    <div class="row bottom-buffer">
+        <p>
+            <div class="btn-group">
+                <button class="btn btn-default" ng-click="editLocation()">Edit</button>
+                <button class="btn btn-default" ng-click="addLocation()">Add</button>
+                <button class="btn btn-default" ng-click="deleteLocation()" aria-hidden="true">Remove</button>
+                <button class="btn btn-default" ng-click="shareLocations()" title="Share"><i class="glyphicon glyphicon-share"></i></button>
+            </div>
+            <span class="lead">Locations</span>
+        </p>
+        <p>
+            <div class="col-lg-2">
+                <button class="btn btn-default btn-xs btn-block" ng-click="setGrouping()">{{groupByCategory === false ? 'Group by Category' : 'No Grouping'}}</button>
+            </div>
+            <div class="col-lg-3">
+                <select class="form-control input-sm small-select" ng-options="category.name for category in categories" ng-model="filterCategory">
+                    <option value="">-- choose filter category --</option>
+                </select>
+            </div>
+        </p>
+    </div>
+    <form name="newLocationForm" class="form-horizontal" ng-show="isInAddLocationMode" novalidate>
+        <fieldset>
+            <div class="form-group" ng-class="{'has-error' : newLocationForm.Name.$invalid}">
+                <lable for="Name" class="col-lg-1 control-label">Name:</lable>
+                <div class="col-lg-11">
+                    <input type="text" class="form-control" name="Name" ng-model="newLocation.Name" required show-focus="isInAddLocationMode">
+                </div>
+            </div>
+            <div class="form-group" ng-class="{'has-error' : newLocationForm.Address.$invalid}">
+                <lable for="Address" class="col-lg-1 control-label">Address:</lable>
+                <div class="col-lg-11">
+                    <input type="text" class="form-control" name="Address" ng-model="newLocation.Address" required>
+                </div>
+            </div>
+            <div class="form-group" ng-class="{'has-error' : newLocationForm.Coordinates.$invalid}">
+                <lable for="Coordinates" class="col-lg-1 control-label">Coordinates:</lable>
+                <div class="col-lg-11">
+                    <input type="text" class="form-control" name="Coordinates" ng-model="newLocation.Coordinates" required pattern="^(\-?\d+(\.\d+)?),\s*(\-?\d+(\.\d+)?)$">
+                </div>
+            </div>
+            <div class="form-group" ng-class="{'has-error' : newLocationForm.Category.$invalid}">
+                <lable for="Category" class="col-lg-1 control-label">Category:</lable>
+                <div class="col-lg-11">
+                    <select ng-options="category.name for category in categories" class="form-control" name="Category" ng-model="newLocation.Category" required>
+                        <option value="">-- choose category --</option>
+                    </select>
+                </div>
+            </div>
+            <div class="col-lg-3 ">
+                <button class="btn btn-primary btn-block" type="button" ng-click="insertLocation()" ng-disabled="newLocationForm.$invalid">Insert</button>
+            </div>
+            <div class="col-lg-8"></div>
+            <div class="col-lg-1 "><button class="btn btn-default pull-right" ng-click="isInAddLocationMode=false">X</button></div>
+        </fieldset>
+    </form>
+    <form name="editLocationForm" class="form-horizontal" novalidate ng-show="isInEditLocationMode">
+        <fieldset>
+            <div class="form-group" ng-class="{'has-error' : editLocationForm.Name.$invalid}">
+                <lable for="Name" class="col-lg-1 control-label">Name:</lable>
+                <div class="col-lg-11">
+                    <input type="text" class="form-control" name="Name" ng-model="editLocation.Name" required show-focus="isInEditLocationMode">
+                </div>
+            </div>
+            <div class="form-group" ng-class="{'has-error' : editLocationForm.Address.$invalid}">
+                <lable for="Address" class="col-lg-1 control-label">Address:</lable>
+                <div class="col-lg-11">
+                    <input type="text" class="form-control" name="Address" ng-model="editLocation.Address" required>
+                </div>
+            </div>
+            <div class="form-group" ng-class="{'has-error' : editLocationForm.Coordinates.$invalid}">
+                <lable for="Coordinates" class="col-lg-1 control-label">Coordinates:</lable>
+                <div class="col-lg-11">
+                    <input type="text" class="form-control" name="Coordinates" ng-model="editLocation.Coordinates" required pattern="^(\-?\d+(\.\d+)?),\s*(\-?\d+(\.\d+)?)$">
+                </div>
+            </div>
+            <div class="form-group" ng-class="{'has-error' : editLocationForm.Category.$invalid}">
+                <lable for="Category" class="col-lg-1 control-label">Category:</lable>
+                <div class="col-lg-11">
+                    <select ng-options="category.name for category in categories track by category.name" class="form-control" name="Category" ng-model="editLocation.Category" required>
+                        <option value="">-- choose category --</option>
+                    </select>
+                </div>
+            </div>
+            <div class="col-lg-3 ">
+                <button class="btn btn-primary btn-block" type="button" ng-click="updateLocation()" ng-disabled="editLocationForm.$invalid">Update</button>
+            </div>
+            <div class="col-lg-8"></div>
+            <div class="col-lg-1 "><button class="btn btn-default pull-right" ng-click="isInEditLocationMode=false">X</button></div>
+        </fieldset>
+    </form>
+    <div class="row">
+        <div class="col-lg-6">
+            <div class="bs-component" ng-model="locations" ng-hide="groupByCategory">
+                <div class="list-group">
+                    <a href="#" ng-repeat="location in locations | filterBy: ['Category.name']: filterCategory.name | orderBy:'Name' " ng-class="{active : isLocationSelected(location),'list-group-item': true}" ng-click="selectLocation(location)">
+                        <h4 class="list-group-item-heading">{{location.Name}}</h4>
+                        <p class="list-group-item-text">Address: {{location.Address}}</p>
+                        <p class="list-group-item-text"><small>Category: {{location.Category.name}}</small></p>
+                        <button class="btn btn-info btn-xs" ng-click="showMap = ! showMap">{{showMap ? 'Hide Map' : 'Show Map'}}</button>
+                        <div id="map_canvas" ng-if="showMap">
+                            <map center="{{location.Coordinates}}" zoom="16">
+                                <marker position="{{location.Coordinates}}" title="{{location.Name}}"></marker>
+                            </map>
+                        </div>
+                    </a>
+
+                </div>
+            </div>
+            <div class="bs-component" ng-model="locations" ng-show="groupByCategory">
+                <ul>
+                    <li ng-repeat="(key, value) in locations | groupBy: 'Category.name'">
+                        Category: {{ key }}
+                        <div class="list-group">
+                            <a href="#" ng-repeat="location in value | orderBy:'Name' " ng-class="{active : isLocationSelected(location),'list-group-item': true}" ng-click="selectLocation(location)">
+                                <h4 class="list-group-item-heading">{{location.Name}}</h4>
+                                <p class="list-group-item-text">Address: {{location.Address}}</p>
+                                <p class="list-group-item-text"><small>Category: {{location.Category.name}}</small></p>
+                                <button class="btn btn-info btn-xs" ng-click="showMap = ! showMap">{{showMap ? 'Hide Map' : 'Show Map'}}</button>
+                                <div id="map_canvas" ng-if="showMap">
+                                    <map center="{{location.Coordinates}}" zoom="16">
+                                        <marker position="{{location.Coordinates}}" title="{{location.Name}}"></marker>
+                                    </map>
+                                </div>
+                            </a>
+                        </div>
+                    </li>
+                </ul>
+            </div>
+        </div>
+
+    </div>
+
+</div>
